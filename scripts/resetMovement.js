@@ -9,6 +9,19 @@ Hooks.once("init", () => {
     initControls();
 });
 
+/**
+ * TO DO
+ * 
+ * hide 'tokens' setting as well and make it dynamic and push changes
+ * make functional
+ * 
+ * 
+ */
+
+
+
+
+
 
 
 export function resetMovement () {
