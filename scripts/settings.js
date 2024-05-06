@@ -41,7 +41,94 @@ export function initSettings() {
         requiresReload: true,
     });
 
+    game.settings.register(moduleName, 'perms', {
+        name: "User Permisions",
+        scope: "client",
+        config: false,
+        type: Object,
+    });
+
+    game.settings.register(moduleName, 'history', {
+        name: "Reset History",
+        hint: "Reset Drag-Ruler history during reset.",
+        scope: "client",
+        config: false,
+        type: Boolean,
+        default: true,
+        onChange: ()=>{updateControls(); updateSettings();},
+    });
+
+    game.settings.register(moduleName, 'position', {
+        name: "Reset Position",
+        hint: "Reset token to last turn position during reset.",
+        scope: "client",
+        config: false,
+        type: Boolean,
+        default: true,
+        onChange: ()=>{updateControls(); updateSettings();},
+    });
+
+    game.settings.register(moduleName, 'tokens', {
+        name: "Tokens to Reset",
+        hint: "Control which tokens are reset.",
+        scope: "client",
+        config: false,
+        type: String,
+        choices: tokenOptions,
+        default: 'selected',
+        onChange: updateSettings,
+    });
+
+    game.settings.register(moduleName, 'tokensFallback', {
+        name: "Fallback Tokens Selection",
+        scope: "client",
+        config: false,
+        type: Array,
+        default: [],
+        onChange: verifyFallback,
+    });
+
+    game.settings.register(moduleName, 'tokensFallbackEnabled', {
+        name: "Enable Fallback",
+        hint: "Tokens to reset if main selection is empty.",
+        scope: "client",
+        config: false,
+        type: Boolean,
+        default: false,
+        onChange: (val) => { 
+            const tokens = game.settings.get(moduleName, 'tokensFallback');
+            if (val && tokens.length<=0) {
+                const main_token = game.settings.get(moduleName, 'tokens');
+                game.settings.set(moduleName, 'tokensFallback', [Object.keys(tokenOptions).filter(o=>o!=main_token)[0]]);
+            }
+        },
+    });
+
+    for (let i=0; i<Object.keys(tokenOptions).length-1; i++) {
+        game.settings.register(moduleName, `tokensFallback${i+1}`, {
+            name: `Fallback ${i+1}`,
+            scope: "client",
+            config: false,
+            type: String,
+            choices: {},
+            onChange: (val) => {
+                const tokens = game.settings.get(moduleName, 'tokensFallback');
+                tokens[i] = val;
+                game.settings.set(moduleName, 'tokensFallback', tokens);                
+            },
+        });
+    }
+
 }
+
+function preRender () {
+    
+
+}
+
+
+
+
 
 
 function getPerms () {
@@ -69,33 +156,7 @@ export function getChoices () {
 export function readySettings() {
 
     const perms = getPerms();
-    game.settings.register(moduleName, 'perms', {
-        name: "User Permisions",
-        scope: "client",
-        config: false,
-        type: Object,
-    });
     game.settings.set(moduleName,'perms',perms);
-
-    game.settings.register(moduleName, 'history', {
-        name: "Reset History",
-        hint: "Reset Drag-Ruler history during reset.",
-        scope: "client",
-        config: perms.history,
-        type: Boolean,
-        default: true,
-        onChange: ()=>{updateControls(); updateSettings();},
-    });
-
-    game.settings.register(moduleName, 'position', {
-        name: "Reset Position",
-        hint: "Reset token to last turn position during reset.",
-        scope: "client",
-        config: perms.position,
-        type: Boolean,
-        default: true,
-        onChange: ()=>{updateControls(); updateSettings();},
-    });
 
     const show = Object.values(perms).some(Boolean);
 
@@ -103,10 +164,11 @@ export function readySettings() {
         name: "Tokens to Reset",
         hint: "Control which tokens are reset.",
         scope: "client",
-        config: show,
+        config: false,
         type: String,
         choices: tokenOptions,
         default: 'selected',
+        onChange: updateSettings,
     });
 
     game.settings.register(moduleName, 'tokensFallback', {
@@ -120,7 +182,6 @@ export function readySettings() {
     verifyFallback();
 
 }
-
 
 export function getSelectionOrder () {
     return [game.settings.get(moduleName, 'tokens'), ...game.settings.get(moduleName, 'tokensFallback')];
@@ -140,11 +201,30 @@ function updateSettings () {
     if (game.settings.sheet.rendered) { game.settings.sheet.render(); }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function updateFallbackSettings () {
     
     const show = Object.values(getChoices()).some(Boolean);
     const tokens = game.settings.get(moduleName, 'tokensFallback');
     const main_token = game.settings.get(moduleName, 'tokens');
+
+    game.settings.settings.get()
 
     game.settings.register(moduleName, 'tokensFallbackEnabled', {
         name: "Enable Fallback",
