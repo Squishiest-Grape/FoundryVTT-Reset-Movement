@@ -1,6 +1,6 @@
 
 import { getChoices, readySettings } from "./settings.js";
-import { resetMovement } from "./resetMovement.js";
+import { resetMovement } from "./main.js";
 
 
 const moduleName = 'reset-movement';
