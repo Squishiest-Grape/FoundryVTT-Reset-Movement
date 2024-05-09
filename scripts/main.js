@@ -1,12 +1,13 @@
 
 import { initControls } from './controls.js';
-import { initSettings, getChoices } from './settings.js';
+import { initSettings, settings } from './settings.js';
 
-const moduleName = 'reset-movement';
+
 
 Hooks.once("init", () => {
     initSettings();
     initControls();
+    console.log('Init Happend')
 });
 
 /**
@@ -20,45 +21,45 @@ Hooks.once("init", () => {
 
 
 
-
-
-
-
 export function resetMovement () {
-    const choices = getChoices();
-    const animate = game.settings.get(moduleName, 'animation');
-    const tokens = getTokens();
-    console.log(`Reset Movement: ${Object.keys(choices).filter(k=>choices[k])}\n  for tokens: ${tokens.map(t=>t.id)}\n  with animation = ${animate}`);
-
+    // const choices = getChoices();
+    // const animate = game.settings.get(moduleName, 'animation');
+    // const tokens = getTokens();
+    // console.log(`Reset Movement: ${Object.keys(choices).filter(k=>choices[k])}\n  for tokens: ${tokens.map(t=>t.id)}\n  with animation = ${animate}`);
 
 }
 
-function getTokens () {
-    let tokens = getTokens0(game.settings.get(moduleName, 'tokens'));
-    // if (tokens.length > 0) { return tokens; }
-    // return getTokens0(game.settings.get(moduleName, 'tokens2'));
-    return tokens;
-}
 
-function getTokens0 (tokenChoice) {
-    let tokens = game.canvas.tokens.ownedTokens;
-    switch (tokenChoice) {
-        case 'all':
-            return tokens;
-        case 'user':
-            return tokens.filter(t=>t.actor==game.user.character);
-        case 'turn':
-            return tokens.filter(t=>t.id==game.combat.current.tokenId);
-        case 'combat':
-            return tokens.filter(t=>t.inCombat);
-        case 'selected':
-            return tokens.filter(t=>t.controlled);
-        case 'none':
-            return [];
-        default:
-            throw new Error(`Reset Movement unknown token selection choice: ${tokenChoice}`);
-    }
-}
+
+
+
+
+// function getTokens () {
+//     let tokens = getTokens0(game.settings.get(moduleName, 'tokens'));
+//     // if (tokens.length > 0) { return tokens; }
+//     // return getTokens0(game.settings.get(moduleName, 'tokens2'));
+//     return tokens;
+// }
+
+// function getTokens0 (tokenChoice) {
+//     let tokens = game.canvas.tokens.ownedTokens;
+//     switch (tokenChoice) {
+//         case 'all':
+//             return tokens;
+//         case 'user':
+//             return tokens.filter(t=>t.actor==game.user.character);
+//         case 'turn':
+//             return tokens.filter(t=>t.id==game.combat.current.tokenId);
+//         case 'combat':
+//             return tokens.filter(t=>t.inCombat);
+//         case 'selected':
+//             return tokens.filter(t=>t.controlled);
+//         case 'none':
+//             return [];
+//         default:
+//             throw new Error(`Reset Movement unknown token selection choice: ${tokenChoice}`);
+//     }
+// }
 
 
 // async function resetMovement() {

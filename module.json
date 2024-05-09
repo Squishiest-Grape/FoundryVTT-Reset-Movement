@@ -1,13 +1,21 @@
 {
   "title": "Reset Movement",
   "description": "Returns the token to its original position from the end of its last turn.",
-  "version": "2.0.0",
+  "id": "reset-movement",
   "esmodules": [
     "scripts/main.js"
   ],
-  "id": "reset-movement",
+  "relationships": {
+    "requires": [{
+      "id": "dynamic-settings",
+      "compatibility": {
+        "verified": "1.0.0"
+      }
+    }]
+  },
   "compatibility": {
     "minimum": "11",
     "verified": "11"
-  }
+  },
+  "version": "2.0.0"
 }

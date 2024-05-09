@@ -1,19 +1,16 @@
 
-import { getChoices, readySettings } from "./settings.js";
+import { settings } from "./settings.js";
 import { resetMovement } from "./main.js";
 
-
-const moduleName = 'reset-movement';
 
 const controls = {};
 
 export function initControls() {
     Hooks.on("getSceneControlButtons", (_controls) => {
-        readySettings();
-        const choices = getChoices();
+        const choices = settings.get('choices with perms');
         const needsButton = Object.values(choices).some(Boolean);
         const button = {
-            name: moduleName,
+            name: 'reset-movement.button',
             title: "Reset Movement",
             icon: "fas fa-sync-alt",
             onClick: () => resetMovement(),
@@ -27,7 +24,7 @@ export function initControls() {
 }
 
 export function updateControls () {
-    const choices = getChoices();
+    const choices = settings.get('choices with perms');
     const needsButton = Object.values(choices).some(Boolean);
     if (needsButton) { 
         controls.button.active = true;
